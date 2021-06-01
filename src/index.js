@@ -79,6 +79,16 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 //app.use('/', express.static(path.join(__dirname,  '../public')))
 
+app.get('', (req, res) => {
+    res.json({
+        'Infected by state': '/infectedByState',
+        'Infected by date': '/infectedByDate',
+        'Asthmatic by age': '/asthmaByAge',
+        'Neumonia by age': '/neumoniaByAge',
+        'Intubated by age': '/intubatedByAge'
+    })
+})
+
 app.get('/infectedByState', (req, res) => {
     const getResult = R.countBy(R.prop('Estado'))
 
