@@ -1,0 +1,19 @@
+{
+  "name": "covid_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "convert-excel-to-json": "^1.7.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "ramda": "^0.27.1",
+    "simple-excel-to-json": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon --watch src --watch public src/index.js -e js,css,html"
+  },
+  "author": "",
+  "license": "ISC"
+}

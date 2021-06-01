@@ -1,0 +1,17 @@
+
+#logo {
+	height:50px;
+}
+
+.navbar-brand {
+	height: 60px;
+	padding: 5px 0px;
+}
+
+body {
+	background-color: gray;
+}
+
+.navbar {
+	background-color: gray;
+}
