@@ -12,7 +12,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "nodemon --watch src --watch public src/index.js -e js,css,html"
+    "dev": "nodemon --watch src --watch public src/index.js -e js,css,html",
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC"
