@@ -38,7 +38,9 @@ def load_files():
         print("Done.")
         # print(covid_df.head(5))  # Prints the top n values of my data source
         # Save clean data
-        covid_df.to_excel(r'export_dataframe.xlsx', index=False, header=True)
+        covid_df_reduced = covid_df[['CLASIFICACION_FINAL','ENTIDAD_RES','FECHA_SINTOMAS','ASMA','EDAD','INTUBADO','NEUMONIA']]
+        covid_df_reduced = covid_df_reduced.loc[covid_df_reduced['CLASIFICACION_FINAL'].str.contains("Confirmado")]
+        covid_df_reduced.to_json(r'export_dataframe.json', orient='records')
     else:
         xl = pd.ExcelFile('export_dataframe.xlsx')
         covid_df = xl.parse('Sheet1')
@@ -107,9 +109,9 @@ load_files()
 
 # print(covid_df["ENTIDAD_RES"].value_counts())
 
-sex_by_state_df = covid_df[['SEXO', 'ENTIDAD_RES']]
-print("The data set contains " + str(sex_by_state_df.shape[0]) + " rows by " + str(sex_by_state_df.shape[1]) + " columns.")
-print(sex_by_state_df.head())
+# sex_by_state_df = covid_df[['SEXO', 'ENTIDAD_RES']]
+# print("The data set contains " + str(sex_by_state_df.shape[0]) + " rows by " + str(sex_by_state_df.shape[1]) + " columns.")
+# print(sex_by_state_df.head())
 
 # TODO: Make sure you have virtualenv, django and djantorestframework
 

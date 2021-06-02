@@ -1,37 +1,22 @@
-const excelToJson = require('convert-excel-to-json')
-const fs = require('fs')
-const path = require('path')
 const express = require('express')
 const R = require('ramda')
+const COVID_DB = require('../COVID/export_dataframe.json')
 
-sourceFile = './COVID/export_dataframe_medium.xlsx'
 
-// INFECTED
-const infected = excelToJson({
-    sourceFile: sourceFile,
-    header: {
-        rows: 1
-    },
-    sheets: ['Sheet1'],
-    columnToKey: {
-        AI: 'Contagiado',
-        G: 'Estado',
-        K: 'Fecha',
-        V: 'Asma',
-        O: 'Edad',
-        M: 'Intubado',
-        N: 'Neumonia'
-    }
-})
-
-fs.writeFileSync("src/data/infected.json", JSON.stringify(infected, null, 2), (err) => {
-    if (err) {
-        console.log(err)
+const infected = COVID_DB.map(d => {
+    return {
+        Contagiado: d.CLASIFICACION_FINAL,
+        Estado: d.ENTIDAD_RES,
+        Fecha: d.FECHA_SINTOMAS,
+        Asma: d.ASMA,
+        Edad: d.EDAD,
+        Intubado: d.INTUBADO,
+        Neumonia: d.NEUMONIA
     }
 })
 
 //INFECTED BY STATE
-const infectedByState = infected.Sheet1.map(d => {
+const infectedByState = infected.map(d => {
     return {
         Estado: d.Estado,
         Contagiado: d.Contagiado
@@ -39,7 +24,7 @@ const infectedByState = infected.Sheet1.map(d => {
 })
 
 //INFECTED BY DATE
-const infectedByDate = infected.Sheet1.map(d => {
+const infectedByDate = infected.map(d => {
     return {
         Fecha: d.Fecha,
         Contagiado: d.Contagiado
@@ -47,7 +32,7 @@ const infectedByDate = infected.Sheet1.map(d => {
 })
 
 //ASTHMATIC BY AGE
-const asthmaByAge = infected.Sheet1.map(d => {
+const asthmaByAge = infected.map(d => {
     return {
         Edad: d.Edad,
         Contagiado: d.Contagiado,
@@ -56,7 +41,7 @@ const asthmaByAge = infected.Sheet1.map(d => {
 })
 
 //NEUMONIA BY AGE
-const neumoniaByAge = infected.Sheet1.map(d => {
+const neumoniaByAge = infected.map(d => {
     return {
         Edad: d.Edad,
         Neumonia: d.Neumonia,
@@ -65,7 +50,7 @@ const neumoniaByAge = infected.Sheet1.map(d => {
 })
 
 //INTUBATED BY AGE
-const intubatedByAge = infected.Sheet1.map(d => {
+const intubatedByAge = infected.map(d => {
     return {
         Edad: d.Edad,
         Intubado: d.Intubado,
@@ -112,13 +97,7 @@ app.get('/infectedByDate', (req, res) => {
 app.get('/asthmaByAge', (req, res) => {
     const getResult = R.countBy(R.prop('Edad'))
 
-    const filteredResult = asthmaByAge.filter(d => {
-        var filtered = true
-        if(!d.Contagiado.toLowerCase().includes("confirmado")) filtered = false
-        if(d.Asma != 'SI') filtered = false
-
-        return filtered
-    })
+    const filteredResult = asthmaByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
     
     res.json(getResult(filteredResult))
 })
@@ -126,13 +105,7 @@ app.get('/asthmaByAge', (req, res) => {
 app.get('/neumoniaByAge', (req, res) => {
     const getResult = R.countBy(R.prop('Edad'))
 
-    const filteredResult = neumoniaByAge.filter(d => {
-        var filtered = true
-        if(!d.Contagiado.toLowerCase().includes("confirmado")) filtered = false
-        if(d.Neumonia != 'SI') filtered = false
-
-        return filtered
-    })
+    const filteredResult = neumoniaByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
     
     res.json(getResult(filteredResult))
 })
@@ -140,13 +113,7 @@ app.get('/neumoniaByAge', (req, res) => {
 app.get('/intubatedByAge', (req, res) => {
     const getResult = R.countBy(R.prop('Edad'))
 
-    const filteredResult = intubatedByAge.filter(d => {
-        var filtered = true
-        if(!d.Contagiado.toLowerCase().includes("confirmado")) filtered = false
-        if(d.Intubado != 'SI') filtered = false
-
-        return filtered
-    })
+    const filteredResult = intubatedByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
     
     res.json(getResult(filteredResult))
 })
