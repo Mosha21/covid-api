@@ -17,7 +17,7 @@ var pieSet2 = {
 	otra: 10
 }
 
-fetch('http://localhost:3000/nationality')
+fetch('https://covid2020-api.herokuapp.com/infectedByState')
 .then(result => result.json()).then(data => {
 	update(data)
 	pieSet1 = data
@@ -65,14 +65,14 @@ const update = (data) => {
     .remove()
 }
 
-$("#data1").click(function () {
-	update(pieSet1)
-	$(this).prop("disabled", true)
-	$("#data2").prop("disabled", false)
-})
+// $("#data1").click(function () {
+// 	update(pieSet1)
+// 	$(this).prop("disabled", true)
+// 	$("#data2").prop("disabled", false)
+// })
 
-$("#data2").click(function () {
-	update(pieSet2)
-	$(this).prop("disabled", true)
-	$("#data1").prop("disabled", false)
-})
+// $("#data2").click(function () {
+// 	update(pieSet2)
+// 	$(this).prop("disabled", true)
+// 	$("#data1").prop("disabled", false)
+// })

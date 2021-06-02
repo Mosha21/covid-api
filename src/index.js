@@ -65,7 +65,7 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(cors())
-//app.use('/', express.static(path.join(__dirname,  '../public')))
+app.use('/', express.static(path.join(__dirname,  '../public')))
 
 app.get('', (req, res) => {
     res.json({
@@ -81,8 +81,14 @@ app.get('/infectedByState', (req, res) => {
     const getResult = R.countBy(R.prop('Estado'))
 
     const filteredResult = infectedByState.filter(d => d.Contagiado.toLowerCase().includes("confirmado"))
+
+    var jsonResult = getResult(filteredResult)
+    var result = [];
+
+    for(var i in jsonResult)
+        result.push({Estado: i, Cantidad: jsonResult[i]})
     
-    res.json(getResult(filteredResult))
+    res.send(result)
 })
 
 app.get('/infectedByDate', (req, res) => {
@@ -94,7 +100,13 @@ app.get('/infectedByDate', (req, res) => {
 
     const filteredResult = infectedByDate.filter(d => d.Contagiado.toLowerCase().includes("confirmado"))
     
-    res.json(getResult(filteredResult))
+    var jsonResult = getResult(filteredResult)
+    var result = [];
+
+    for(var i in jsonResult)
+        result.push({Fecha: i, Cantidad: jsonResult[i]})
+    
+    res.send(result)
 })
 
 app.get('/asthmaByAge', (req, res) => {
@@ -102,23 +114,41 @@ app.get('/asthmaByAge', (req, res) => {
 
     const filteredResult = asthmaByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
     
-    res.json(getResult(filteredResult))
+    var jsonResult = getResult(filteredResult)
+    var result = [];
+
+    for(var i in jsonResult)
+        result.push({Edad: i, Cantidad: jsonResult[i]})
+    
+    res.send(result)
 })
 
 app.get('/neumoniaByAge', (req, res) => {
     const getResult = R.countBy(R.prop('Edad'))
 
-    const filteredResult = neumoniaByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
+    const filteredResult = neumoniaByAge.filter(d => d.Neumonia.replace(' ', '') != 'SI')
     
-    res.json(getResult(filteredResult))
+    var jsonResult = getResult(filteredResult)
+    var result = [];
+
+    for(var i in jsonResult)
+        result.push({Edad: i, Cantidad: jsonResult[i]})
+    
+    res.send(result)
 })
 
 app.get('/intubatedByAge', (req, res) => {
     const getResult = R.countBy(R.prop('Edad'))
 
-    const filteredResult = intubatedByAge.filter(d => d.Asma.replace(' ', '') != 'SI')
+    const filteredResult = intubatedByAge.filter(d => d.Intubado.replace(' ', '') != 'SI')
     
-    res.json(getResult(filteredResult))
+    var jsonResult = getResult(filteredResult)
+    var result = [];
+
+    for(var i in jsonResult)
+        result.push({Edad: i, Cantidad: jsonResult[i]})
+    
+    res.send(result)
 })
 
 app.listen(port, () => {
